@@ -3,7 +3,7 @@ name: Remote Deploy on vServer
 on:
   push:
     branches:
-      - main  # Passe das an (main oder master), falls nötig
+      - main
 
 jobs:
   deploy:
@@ -20,5 +20,10 @@ jobs:
             cd /var/projects/kyrex.samwilliam.de
             git pull origin main
             npm install
+            composer install --no-dev --optimize-autoloader
+            php artisan optimize:clear
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
             npm run build
             chown -R www-data:www-data /var/projects/kyrex.samwilliam.de
